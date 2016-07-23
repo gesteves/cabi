@@ -14,6 +14,36 @@ configure do
   end
 end
 
+get '/' do
+  @page_title = '/cabi: Capital Bikeshare in slack'
+  erb :index, layout: :application
+end
+
+get '/privacy' do
+  @page_title = '/cabi privacy policy'
+  erb :privacy, layout: :application
+end
+
+get '/support' do
+  @page_title = '/cabi support'
+  erb :support, layout: :application
+end
+
+get '/auth' do
+  @page_title = 'Auth failed!'
+  if !params[:code].nil?
+    token = get_access_token(params[:code])
+    if token['ok']
+      @page_title = 'Success!'
+      erb :success, layout: :application
+    else
+      erb :fail, layout: :application
+    end
+  else
+    erb :fail, layout: :application
+  end
+end
+
 post '/search' do
   if params[:token] == ENV['SLACK_VERIFICATION_TOKEN']
     query = params[:text].sub(/^\s*(in|for|at)\s+/, '').strip
@@ -98,4 +128,13 @@ end
 
 def map_image(lat, long)
   "https://maps.googleapis.com/maps/api/staticmap?key=#{ENV['MAPS_API_KEY']}&size=400x200&markers=#{lat},#{long}"
+end
+
+def parameterize(string)
+  string.gsub(/[^a-z0-9]+/i, '-').downcase
+end
+
+def get_access_token(code)
+  response = HTTParty.get("https://slack.com/api/oauth.access?code=#{code}&client_id=#{ENV['SLACK_CLIENT_ID']}&client_secret=#{ENV['SLACK_CLIENT_SECRET']}&redirect_uri=#{request.scheme}://#{request.host_with_port}/auth")
+  JSON.parse(response.body)
 end
