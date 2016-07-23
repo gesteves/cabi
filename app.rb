@@ -99,9 +99,6 @@ def build_response(lat, long, station)
 
   attachments = []
   attachment = { fallback: "The nearest Capital Bikeshare station with bikes is #{name}: #{link}", color: '#ff300b', pretext: "This is the nearest Capital Bikeshare station with bikes:", title: name, title_link: link, image_url: map_image(station_lat, station_long) }
-  attachments << attachment
-
-  attachment = { fallback: "Available Bikes: #{bikes}; Available Docks: #{docks}", color: '#ff300b' }
   fields = []
   fields << { title: 'Available Bikes', value: bikes, short: true }
   fields << { title: 'Available Docks', value: docks, short: true }
