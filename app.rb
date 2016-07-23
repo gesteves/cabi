@@ -127,7 +127,7 @@ def distance(loc1, loc2)
 end
 
 def map_image(lat, long)
-  "https://maps.googleapis.com/maps/api/staticmap?key=#{ENV['MAPS_API_KEY']}&size=400x200&markers=#{lat},#{long}"
+  "https://maps.googleapis.com/maps/api/staticmap?key=#{ENV['MAPS_API_KEY']}&size=400x200&markers=#{lat},#{long}&scale=2"
 end
 
 def parameterize(string)
